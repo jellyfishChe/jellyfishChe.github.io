@@ -1,0 +1,49 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(10, 100px);
+    grid-template-rows: repeat(9, 50px);
+    gap: 5px;
+    padding: 10px;
+    width: max-content;
+    margin: 20px auto;
+}
+
+.rectangle {
+    background-color: #e6f2ff; /* a light gray for the default state */
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.rectangle.touched {
+    background-color: #b3d9ff; /* a slightly darker gray for the touched state */
+}
+
+.rectangle.locked{
+    background-color: #c0c0c0; /* a light red to indicate a locked or unavailable state */
+}
+
+
+.normalRect{
+    margin:20px auto;
+    height: 50px;
+    width: 100px;
+    background-color: #e6f2ff;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.counter {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
