@@ -2,9 +2,15 @@ const container = document.getElementById('container');
 const touchedCountEl = document.getElementById('touchedCount');
 const resetBtnEl = document.getElementById('resetBTN');
 
-let touchedCount = 0;
 let MJcount=[];
 let obj=[];
+let choose=new Set();
+let lockin=new Set();
+
+lockMap.has = function(key) {
+    // Check if the key exists directly in the object's own properties
+    return Object.prototype.hasOwnProperty.call(this, key);
+};
 
 Promise.all([
     d3.csv("MJ.csv")
@@ -13,38 +19,67 @@ Promise.all([
     plotRectangle();
 });
 
+function updateRect(it){
+    if(choose.has(it)){
+        if(lockMap.has(it)){
+            for(let lock of lockMap[it]){
+                choose.delete(lock);
+            }
+        }
+    }
+    lockin.clear();
+    for(let ch of choose){
+        if(lockMap.has(ch)){
+            for(let lock of lockMap[ch]){
+                lockin.add(lock);
+            }
+        }
+    }
+
+    for (let i=0; i < MJcount.length; i++) {
+        obj[i].classList.remove('touched');
+        obj[i].classList.remove('locked');
+
+        if(choose.has(i)){
+            obj[i].classList.add('touched');
+        }else if(lockin.has(i)){
+            obj[i].classList.add('locked');
+        }
+    }
+
+    let counter=0;
+    for (let ch of choose){
+        counter+=parseInt(MJcount[ch].num);
+    }
+    touchedCountEl.textContent = counter;
+}
+
 function plotRectangle(){
-    for (let i=1; i <= MJcount.length; i++) {
+    for (let i=0; i < MJcount.length; i++) {
         const rect = document.createElement('div');
         rect.classList.add('rectangle');
-        rect.textContent = MJcount[i-1].name;
+        rect.textContent = i+" "+MJcount[i].name;
 
         // Click event to toggle touch state
         rect.addEventListener('click', () => {
-            if (rect.classList.contains('touched')) {
-                rect.classList.remove('touched');
-                touchedCount-=parseInt(MJcount[i-1].num);
-            } else {
-                rect.classList.add('touched');
-                touchedCount+=parseInt(MJcount[i-1].num);
+            if (!rect.classList.contains('locked')) {
+                if (rect.classList.contains('touched')) {
+                    choose.delete(i);
+                    // touchedCount-=parseInt(MJcount[i].num);
+                } else {
+                    choose.add(i);
+                    // touchedCount+=parseInt(MJcount[i].num);
+                }
+                updateRect(i);
             }
-            updateCounter();
         });
         obj.push(rect);
-        container.appendChild(rect);
+        container.appendChild(obj[i]);
     }
 }
 
 resetBtnEl.addEventListener('click',()=>{
-    touchedCount = 0;
-    for(let i=0;i<MJcount.length;i++){
-        if(obj[i].classList.contains('touched')){
-            obj[i].classList.remove('touched');
-        }
-    }
-    updateCounter();
+    choose.clear();
+    lockin.clear();
+    updateRect();
 })
-
-function updateCounter() {
-    touchedCountEl.textContent = touchedCount;
-}
