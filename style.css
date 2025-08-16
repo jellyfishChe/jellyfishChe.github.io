@@ -15,6 +15,7 @@
     align-items: center;
     justify-content: center;
     font-size: 14px;
+    text-align: center;
     user-select: none;
     transition: background-color 0.2s ease;
 }
@@ -27,11 +28,10 @@
     background-color: #c0c0c0; /* a light red to indicate a locked or unavailable state */
 }
 
-
 .normalRect{
     margin:20px auto;
     height: 50px;
-    width: 100px;
+    width: 200px;
     background-color: #e6f2ff;
     border: 1px solid #333;
     display: flex;

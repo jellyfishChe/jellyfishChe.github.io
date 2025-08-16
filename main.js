@@ -51,6 +51,9 @@ function updateRect(it){
     for (let ch of choose){
         counter+=parseInt(MJcount[ch].num);
     }
+    if(choose.has(87)){
+        counter*=2;
+    }
     touchedCountEl.textContent = counter;
 }
 
@@ -58,17 +61,19 @@ function plotRectangle(){
     for (let i=0; i < MJcount.length; i++) {
         const rect = document.createElement('div');
         rect.classList.add('rectangle');
-        rect.textContent = i+" "+MJcount[i].name;
-
+        if(i!=87){
+            rect.innerHTML = MJcount[i].name+"<br>"+MJcount[i].num+"番";
+        }
+        else{
+            rect.innerHTML = MJcount[i].name+"<br>"+"Double";
+        }
         // Click event to toggle touch state
         rect.addEventListener('click', () => {
             if (!rect.classList.contains('locked')) {
                 if (rect.classList.contains('touched')) {
                     choose.delete(i);
-                    // touchedCount-=parseInt(MJcount[i].num);
                 } else {
                     choose.add(i);
-                    // touchedCount+=parseInt(MJcount[i].num);
                 }
                 updateRect(i);
             }
