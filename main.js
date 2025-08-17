@@ -61,11 +61,10 @@ function plotRectangle(){
     for (let i=0; i < MJcount.length; i++) {
         const rect = document.createElement('div');
         rect.classList.add('rectangle');
-        if(i!=87){
-            rect.innerHTML = MJcount[i].name+"<br>"+MJcount[i].num+"番";
-        }
-        else{
+        if(i==87){
             rect.innerHTML = MJcount[i].name+"<br>"+"Double";
+        }else{
+            rect.innerHTML = MJcount[i].name+"<br>"+MJcount[i].num+"番...."+i;
         }
         // Click event to toggle touch state
         rect.addEventListener('click', () => {
