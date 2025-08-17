@@ -41,14 +41,14 @@ function updateRect(it){
     for (let i=0; i < MJcount.length; i++) {
         obj[i].classList.remove('touched');
         obj[i].classList.remove('locked');
-        if(i==85 || i==86){
-            obj[i].querySelector('.countDisplay').textContent = counts[i]; // 更新顯示數量
-        }
         if(choose.has(i)){
             obj[i].classList.add('touched');
         }else if(lockin.has(i)){
             obj[i].classList.add('locked');
             counts[i]=0;
+        }
+        if(i==85 || i==86){
+            obj[i].querySelector('.countDisplay').textContent = counts[i];
         }
     }
 
@@ -95,10 +95,12 @@ function plotRectangle(){
             minusBtn.style.width = "22px";
             minusBtn.style.height = "22px";
             minusBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (counts[i] > 0) counts[i]--;
-                if (counts[i] === 0) choose.delete(i);
-                updateRect(i);
+                if (!rect.classList.contains('locked')) {
+                    e.stopPropagation();
+                    if (counts[i] > 0) counts[i]--;
+                    if (counts[i] === 0) choose.delete(i);
+                    updateRect(i);
+                }
             });
 
             const countDisplay = document.createElement('span');
@@ -110,11 +112,13 @@ function plotRectangle(){
             plusBtn.style.width = "22px";
             plusBtn.style.height = "22px";
             plusBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (counts[i] > 7) counts[i]--;
-                counts[i]++;
-                choose.add(i);
-                updateRect(i);
+                if (!rect.classList.contains('locked')) {
+                    e.stopPropagation();
+                    if (counts[i] > 7) counts[i]--;
+                    counts[i]++;
+                    choose.add(i);
+                    updateRect(i);
+                }
             });
             controls.appendChild(minusBtn);
             controls.appendChild(countDisplay);
