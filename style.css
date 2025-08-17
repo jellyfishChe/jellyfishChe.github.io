@@ -6,7 +6,6 @@
     padding: 1px;
     width: max-content;
     margin: 20px auto;
-    /* border: 2px solid black; */
 }
 
 .normalContainer {
@@ -17,30 +16,31 @@
     padding: 1px;
     width: max-content;
     margin: 20px auto;
-    /* border: 1px solid black; */
 }
 
 .rectangle {
-    background-color: #e6f2ff; /* a light gray for the default state */
+    background-color: #e6f2ff;
     border: 1px solid #333;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     text-align: center;
     user-select: none;
     transition: background-color 0.2s ease;
+    padding: 5px;
 }
 
 .rectangle.touched {
-    background-color: #b3d9ff; /* a slightly darker gray for the touched state */
+    background-color: #b3d9ff; 
 }
 
-.rectangle.locked{
-    background-color: #c0c0c0; /* a light red to indicate a locked or unavailable state */
+.rectangle.locked {
+    background-color: #c0c0c0; 
 }
 
-.normalRect{
+.normalRect {
     height: 50px;
     width: 200px;
     background-color: #e6f2ff;
@@ -57,4 +57,36 @@
     text-align: center;
     font-size: 18px;
     margin-bottom: 10px;
+}
+
+.controls {
+    margin-top: 6px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.controls button {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid #007BFF;
+    background-color: #e6f2ff;
+    color: #007BFF;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.controls button:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+.countDisplay {
+    min-width: 18px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
 }
