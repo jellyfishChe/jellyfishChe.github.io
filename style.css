@@ -5,12 +5,13 @@
     gap: 5px;
     padding: 1px;
     width: max-content;
+    max-width: 100%;
     margin: 20px auto;
 }
 
 .normalContainer {
     display: grid;
-    grid-template-columns: repeat(2, 200px);
+    grid-template-columns: repeat(5, 200px);
     grid-template-rows: repeat(1, 50px);
     gap: 5px;
     padding: 1px;
@@ -19,31 +20,21 @@
 }
 
 .rectangle {
-    background-color: #e6f2ff;
-    border: 1px solid #333;
+    background-color: #3A7CA5;
+    border: 1px solid #1F4E66;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
     user-select: none;
     transition: background-color 0.2s ease;
     padding: 5px;
 }
 
-.rectangle.touched {
-    background-color: #b3d9ff; 
-}
-
-.rectangle.locked {
-    background-color: #c0c0c0; 
-}
-
 .normalRect {
-    height: 50px;
-    width: 200px;
-    background-color: #e6f2ff;
+    background-color: #3A7CA5;
     border: 1px solid #333;
     display: flex;
     align-items: center;
@@ -51,6 +42,16 @@
     font-size: 18px;
     user-select: none;
     transition: background-color 0.2s ease;
+}
+
+.rectangle.touched {
+    background-color: #2E7D32;
+    border: 1px solid #1B5E20;
+}
+
+.rectangle.locked {
+    background-color: #555555;
+    border: 1px solid #444444;
 }
 
 .counter {
@@ -66,22 +67,27 @@
     gap: 8px;
 }
 
-.controls button {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    border: 1px solid #007BFF;
-    background-color: #e6f2ff;
-    color: #007BFF;
-    font-size: 16px;
+.but{
+    width: 20px;
+    height: 20px;
+    border-radius: 25%;
+    border: 1px solid #1F4E66;
+    background-color: #3A7CA5;
+    color: #000000;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.controls button:hover {
-    background-color: #007BFF;
-    color: white;
+.but.touched {
+    background-color: #2E7D32;
+    border: 1px solid #1B5E20;
+}
+
+.but.locked {
+    background-color: #555555;
+    border: 2px solid #444444;
 }
 
 .countDisplay {
@@ -89,4 +95,27 @@
     text-align: center;
     font-size: 14px;
     font-weight: bold;
+}
+
+@media (max-width: 1000px) and (min-width: 600px) {
+    .container {
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(15, minmax(60px, auto));
+        width: 100%;
+    }
+    .normalContainer {
+        grid-template-columns: repeat(5, 150px);
+        grid-template-rows: repeat(1, 80px);
+    }
+    .rectangle {
+        font-size: 20px;
+    }
+    .normalRect {
+        font-size: 22px;
+    }
+    .but{
+        width: 30px;
+        height: 30px;
+        font-size: 22px;
+    }
 }

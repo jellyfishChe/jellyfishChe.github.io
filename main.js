@@ -1,12 +1,17 @@
 const container = document.getElementById('container');
 const touchedCountEl = document.getElementById('touchedCount');
 const resetBtnEl = document.getElementById('resetBTN');
+const DiEl = document.getElementById('Di');
+const TaiEl = document.getElementById('Tai');
+const PayEl = document.getElementById('Pay');
 
 let MJcount = [];
 let obj = [];
 let choose = new Set();
 let lockin = new Set();
 let counts = [];
+let di=5;
+let tai=2;
 
 // lockMap.js 載入的物件
 lockMap.has = function(key) {
@@ -22,6 +27,8 @@ Promise.all([
 });
 
 function updateRect(it){
+    DiEl.childNodes[1].childNodes[1].textContent=di;
+    TaiEl.childNodes[1].childNodes[1].textContent=tai;
     if(choose.has(it)){
         if(lockMap.has(it)){
             for(let lock of lockMap[it]){
@@ -37,13 +44,28 @@ function updateRect(it){
             }
         }
     }
-
+    obj[85].childNodes[1].childNodes[0].classList.remove('touched');
+    obj[85].childNodes[1].childNodes[2].classList.remove('touched');
+    obj[85].childNodes[1].childNodes[0].classList.remove('locked');
+    obj[85].childNodes[1].childNodes[2].classList.remove('locked');
+    obj[86].childNodes[1].childNodes[0].classList.remove('touched');
+    obj[86].childNodes[1].childNodes[2].classList.remove('touched');
+    obj[86].childNodes[1].childNodes[0].classList.remove('locked');
+    obj[86].childNodes[1].childNodes[2].classList.remove('locked');
     for (let i=0; i < MJcount.length; i++) {
         obj[i].classList.remove('touched');
         obj[i].classList.remove('locked');
         if(choose.has(i)){
             obj[i].classList.add('touched');
+            if(i==85 || i==86){
+                obj[i].childNodes[1].childNodes[0].classList.add('touched');
+                obj[i].childNodes[1].childNodes[2].classList.add('touched');
+            }
         }else if(lockin.has(i)){
+            if(i==85 || i==86){
+                obj[i].childNodes[1].childNodes[0].classList.add('locked');
+                obj[i].childNodes[1].childNodes[2].classList.add('locked');
+            }
             obj[i].classList.add('locked');
             counts[i]=0;
         }
@@ -59,17 +81,18 @@ function updateRect(it){
         }
     }
 
-    if(choose.has(87)){
-        counter *= 2;
-    }
-
     touchedCountEl.textContent = counter;
+
+    let pay=di+counter*tai;
+    if(choose.has(87)){
+        pay *= 2;
+    }
+    PayEl.textContent = pay;
 }
 
 function plotRectangle(){
     for (let i=0; i < MJcount.length; i++) {
         counts[i] = 0;
-
         const rect = document.createElement('div');
         rect.classList.add('rectangle');
 
@@ -90,10 +113,9 @@ function plotRectangle(){
             controls.style.gap = "5px";
             controls.style.marginTop = "4px";
 
-            const minusBtn = document.createElement('button');
+            const minusBtn = document.createElement('div');
+            minusBtn.classList.add("but");
             minusBtn.textContent = "–";
-            minusBtn.style.width = "22px";
-            minusBtn.style.height = "22px";
             minusBtn.addEventListener('click', (e) => {
                 if (!rect.classList.contains('locked')) {
                     e.stopPropagation();
@@ -107,10 +129,9 @@ function plotRectangle(){
             countDisplay.textContent = counts[i];
             countDisplay.classList.add('countDisplay');
 
-            const plusBtn = document.createElement('button');
+            const plusBtn = document.createElement('div');
+            plusBtn.classList.add("but");
             plusBtn.textContent = "+";
-            plusBtn.style.width = "22px";
-            plusBtn.style.height = "22px";
             plusBtn.addEventListener('click', (e) => {
                 if (!rect.classList.contains('locked')) {
                     e.stopPropagation();
@@ -132,10 +153,9 @@ function plotRectangle(){
             controls.style.gap = "5px";
             controls.style.marginTop = "4px";
 
-            const minusBtn = document.createElement('button');
+            const minusBtn = document.createElement('div');
+            minusBtn.classList.add("but");
             minusBtn.textContent = "–";
-            minusBtn.style.width = "22px";
-            minusBtn.style.height = "22px";
             minusBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (counts[i] > 0) counts[i]-=2;
@@ -143,14 +163,14 @@ function plotRectangle(){
                 if (counts[i] === 0) choose.delete(i);
                 updateRect(i);
             });
+            
             const countDisplay = document.createElement('span');
             countDisplay.textContent = counts[i];
             countDisplay.classList.add('countDisplay');
 
-            const plusBtn = document.createElement('button');
+            const plusBtn = document.createElement('div');
+            plusBtn.classList.add("but");
             plusBtn.textContent = "+";
-            plusBtn.style.width = "22px";
-            plusBtn.style.height = "22px";
             plusBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (counts[i] > 0) counts[i]++;
@@ -181,6 +201,80 @@ function plotRectangle(){
         obj.push(rect);
         container.appendChild(rect);
     }
+    // TODO
+    const labelD = document.createElement('div');
+    labelD.innerHTML="底";
+    DiEl.appendChild(labelD);
+
+    const controlsD = document.createElement('div');
+    controlsD.style.display = "flex";
+    controlsD.style.justifyContent = "center";
+    controlsD.style.gap = "5px";
+    controlsD.style.marginTop = "4px";
+
+    const minusBtnD = document.createElement('div');
+    minusBtnD.classList.add("but");
+    minusBtnD.textContent = "–";
+    minusBtnD.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (di > 0) di--;
+        if (di < 0) di=0;
+        updateRect();
+    });
+
+    const countDisplayD = document.createElement('span');
+    countDisplayD.textContent = di;
+    countDisplayD.classList.add('countDisplay');
+
+    const plusBtnD = document.createElement('div');
+    plusBtnD.classList.add("but");
+    plusBtnD.textContent = "+";
+    plusBtnD.addEventListener('click', (e) => {
+        e.stopPropagation();
+        di++;
+        updateRect();
+    });
+    controlsD.appendChild(minusBtnD);
+    controlsD.appendChild(countDisplayD);
+    controlsD.appendChild(plusBtnD);
+    DiEl.appendChild(controlsD);
+    // TODO
+    const labelT = document.createElement('div');
+    labelT.innerHTML="台";
+    TaiEl.appendChild(labelT);
+
+    const controlsT = document.createElement('div');
+    controlsT.style.display = "flex";
+    controlsT.style.justifyContent = "center";
+    controlsT.style.gap = "5px";
+    controlsT.style.marginTop = "4px";
+
+    const minusBtnT = document.createElement('div');
+    minusBtnT.classList.add("but");
+    minusBtnT.textContent = "–";
+    minusBtnT.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (tai > 1) tai--;
+        if (tai < 1) tai=1;
+        updateRect();
+    });
+
+    const countDisplayT = document.createElement('span');
+    countDisplayT.textContent = tai;
+    countDisplayT.classList.add('countDisplay');
+
+    const plusBtnT = document.createElement('div');
+    plusBtnT.classList.add("but");
+    plusBtnT.textContent = "+";
+    plusBtnT.addEventListener('click', (e) => {
+        e.stopPropagation();
+        tai++;
+        updateRect();
+    });
+    controlsT.appendChild(minusBtnT);
+    controlsT.appendChild(countDisplayT);
+    controlsT.appendChild(plusBtnT);
+    TaiEl.appendChild(controlsT);
 }
 
 // Reset
