@@ -10,8 +10,8 @@ let obj = [];
 let choose = new Set();
 let lockin = new Set();
 let counts = [];
-let di=5;
-let tai=2;
+let di=3;
+let tai=1;
 
 // lockMap.js 載入的物件
 lockMap.has = function(key) {
@@ -283,4 +283,5 @@ resetBtnEl.addEventListener('click',()=>{
     lockin.clear();
     counts = counts.map(()=>0);
     updateRect();
+
 });
