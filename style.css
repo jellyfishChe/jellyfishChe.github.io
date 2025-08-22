@@ -7,7 +7,7 @@ a:hover {
     color: red;
 }
 
-.normalContainer {
+.mainContainer {
     display: grid;
     grid-template-columns: repeat(1, 200px);
     grid-template-rows: repeat(2, 50px);
@@ -17,7 +17,7 @@ a:hover {
     margin: 20px auto;
 }
 
-.normalRect {
+.mainRect {
     background-color: #3A7CA5;
     border: 1px solid #333;
     display: flex;
