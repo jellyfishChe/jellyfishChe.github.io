@@ -1,5 +1,5 @@
 id,src,name
-0,,空白
+0,./card/00.png,空白
 1,./card/w1.png,一萬
 2,./card/w2.png,二萬
 3,./card/w3.png,三萬
