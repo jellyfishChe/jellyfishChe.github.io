@@ -1,4 +1,3 @@
-
 let imgList=[];
 Promise.all([
     d3.csv("imgData.csv")

@@ -40,7 +40,6 @@ a:hover {
     filter: grayscale(100%);
 }
 
-
 .handcardContainer {
     display: grid;
     grid-template-columns: repeat(14, 60px);
@@ -96,4 +95,34 @@ a:hover {
     user-select: none;
     transition: background-color 0.2s ease;
     padding: 5px;
+}
+
+.listenContainer {
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(2, 70px);
+    gap: 5px;
+    padding: 1px;
+    width: max-content;
+    max-width: 100%;
+    margin: 20px auto;
+    border: 1px solid darkgray;
+}
+
+.listencard {
+    background-color: darkred;
+    opacity: 0.8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    text-align: center;
+    user-select: none;
+    transition: background-color 0.2s ease;
+    padding: 5px;
+}
+
+.listencard img {
+    width: 55px;
 }

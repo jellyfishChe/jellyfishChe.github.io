@@ -1,11 +1,14 @@
 const cardContainerEl = document.getElementById('cardContainer');
 const handcardContainerEl = document.getElementById('handcardContainer');
+const listenContainerEl = document.getElementById('listenContainer');
 
 let handcardList=[];
 let handcardObj=[];
 let handcardLen=0;
 let cardCount=[];
 let cardObj=[];
+let listencardList=[];
+let listencardObj=[];
 function plotContainer(){
     for (let i=0;i<34;i++){
         const card = document.createElement('div');
@@ -20,18 +23,30 @@ function plotContainer(){
                 cardCount[i]++;
                 handcardList.push(i+1);
                 for (let j=0;j<14 && handcardList.length>14;j++){
-                    if(handcardList[j]===0){
+                    if(handcardList[j]==0){
                         handcardList[j]=handcardList[14];
                         handcardList.pop();
                     }
                 }
             }
-            updateCountainer();            
-            if(mj1(handcardList)){
-                rongEl.innerText="合法胡牌";
+            listencardList=[];
+            if(handcardLen%3==1){
+                if(mj1(handcardList)){
+                    rongEl.innerText="合法胡牌";
+                }else{
+                    rongEl.innerText="詐胡XD";
+                }
+            }else if(handcardLen%3==0){
+                if(mj2(handcardList).length>0){
+                    listencardList=mj2(handcardList);
+                    rongEl.innerText="聽牌中";
+                }else{
+                    rongEl.innerText="沒有聽";
+                }
             }else{
-                rongEl.innerText="不要亂搞";
+                rongEl.innerText="?_?";
             }
+            updateCountainer();
         });
         cardObj.push(card);
         cardContainerEl.appendChild(card);
@@ -53,16 +68,40 @@ function plotContainer(){
                 }
                 handcardList[13]=0;
             }
-            updateCountainer();
-            if(mj1(handcardList)){
-                rongEl.innerText="合法胡牌";
+            listencardList=[];
+            if(handcardLen%3==0){
+                if(mj1(handcardList)){
+                    rongEl.innerText="合法胡牌";
+                }else{
+                    rongEl.innerText="詐胡XD";
+                }
+            }else if(handcardLen%3==2){
+                if(mj2(handcardList).length>0){
+                    listencardList=mj2(handcardList);
+                    rongEl.innerText="聽牌中";
+                }else{
+                    rongEl.innerText="沒有聽";
+                }
             }else{
-                rongEl.innerText="不要亂搞";
+                rongEl.innerText="?_?";
             }
+            updateCountainer();
         });
         
         handcardObj.push(handcard);
         handcardContainerEl.appendChild(handcard);
+    }
+
+    for (let i=0;i<16;i++){
+        const listencard = document.createElement('div');
+        listencard.classList.add('listencard');
+        const listencardimg = document.createElement('img');
+        listencardList.push(0);
+        listencardimg.src = imgList[listencardList[i]].src;
+        listencardimg.alt = imgList[listencardList[i]].name;
+        listencard.appendChild(listencardimg);
+        listencardObj.push(listencard);
+        listenContainerEl.appendChild(listencard);
     }
 }
 

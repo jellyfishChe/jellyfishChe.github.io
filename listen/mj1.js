@@ -1,5 +1,8 @@
 // 七對
 function seven(hc){
+    if(hc[13]==0){
+        return false;
+    }
     for(let i=0;i<13;i++){
         if(i%2==1){
             if(hc[i]==hc[i+1]){
@@ -16,6 +19,9 @@ function seven(hc){
 
 // 國士無雙
 function guoshi(hc){
+    if(hc[13]==0){
+        return false;
+    }
     const gs=new Set([1,9,10,18,19,27,28,29,30,31,32,33,34]);
     let hcSet=new Set();
     for (let i=0;i<14;i++){
@@ -33,6 +39,9 @@ function guoshi(hc){
 
 // 天下無雙
 function tianxia(hc){
+    if(hc[13]==0){
+        return false;
+    }
     const tx=[10,11,12,13,14,17,18,20,22,23,24,26,27,34];
     for(let i=0;i<14;i++){
         if(tx[i]!=hc[i]){
@@ -44,17 +53,14 @@ function tianxia(hc){
 
 // 十三不靠 
 function no13(hc){
+    if(hc[13]==0){
+        return false;
+    }
     const w=[new Set([1,4,7]),new Set([2,5,8]),new Set([3,6,9])];
     const b=[new Set([10,13,16]),new Set([11,14,17]),new Set([12,15,18])];
     const s=[new Set([19,22,25]),new Set([20,23,26]),new Set([21,24,27])];
     const Z=new Set([28,29,30,31,32,33,34]);
 
-    let hcLen=0;
-    for(let mj of hc){
-        if(mj>0){
-            hcLen++;
-        }
-    }
     let hcS=[new Set(),new Set(),new Set(),new Set(),new Set(),new Set(),new Set(),new Set(),new Set(),new Set()];
     for (let i=0;i<14;i++){
         for(let j=0;j<3;j++){
@@ -96,12 +102,16 @@ function no13(hc){
         for(let i=0;i<10;i++){
             hcC+=hcS[i].size;
         }
-        return hcC==13 && hcLen==14;
+        return hcC==13;
     }
     return false;
 }
+
 // 十四不靠
 function no14(hc){
+    if(hc[13]==0){
+        return false;
+    }
     const w=[new Set([1,4,7]),new Set([2,5,8]),new Set([3,6,9])];
     const b=[new Set([10,13,16]),new Set([11,14,17]),new Set([12,15,18])];
     const s=[new Set([19,22,25]),new Set([20,23,26]),new Set([21,24,27])];
@@ -316,4 +326,45 @@ function mj1(hc){
         return true;
     }
     return false;
+}
+
+function mj2(hc){
+    let listening=[];
+    for(let i=1;i<=34;i++){
+        let hcTmp=hc;
+        hcTmp.push(i);
+        for (let j=0;j<14 && hcTmp.length>14;j++){
+            if(hcTmp[j]==0){
+                hcTmp[j]=hcTmp[14];
+                hcTmp.pop();
+            }
+        }
+
+        hcTmp.sort(compareNumbers);
+
+        tmpLen=0;
+        for (let q=0;q<14;q++){
+            if(hcTmp[q]!=0){
+                tmpLen++;
+            }
+        }
+        for (let q=0;q<14-tmpLen;q++){
+            for (let j=0;j<13;j++){
+                let tmp=hcTmp[j];
+                hcTmp[j]=hcTmp[j+1];
+                hcTmp[j+1]=tmp;
+            }
+        }
+        if(mj1(hcTmp)){
+            listening.push(i);
+        }
+
+        for (let j=0;j<13;j++){
+            if(hcTmp[j]>=i){
+                hcTmp[j]=hcTmp[j+1];
+            }
+        }
+        hcTmp[13]=0;
+    }
+    return listening;
 }
