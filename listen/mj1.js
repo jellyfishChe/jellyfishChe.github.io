@@ -329,6 +329,16 @@ function mj1(hc){
 }
 
 function mj2(hc){
+    hc.counts=counts=function(v){
+        let c=0;
+        for(let i=0;i<this.length;i++){
+            if(this[i]==v){
+                c++;
+            }
+        }
+        return c;
+    }
+    
     let listening=[];
     for(let i=1;i<=34;i++){
         let hcTmp=hc;
@@ -356,7 +366,9 @@ function mj2(hc){
             }
         }
         if(mj1(hcTmp)){
-            listening.push(i);
+            if(hc.counts(i)<=4){
+                listening.push(i);
+            }
         }
 
         for (let j=0;j<13;j++){

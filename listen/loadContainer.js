@@ -30,13 +30,19 @@ function plotContainer(){
                 }
             }
             listencardList=[];
-            if(handcardLen%3==1){
+            handcardLen=0;
+            for (let i=0;i<14;i++){
+                if(handcardList[i]!=0){
+                    handcardLen++;
+                }
+            }
+            if(handcardLen%3==2){
                 if(mj1(handcardList)){
                     rongEl.innerText="合法胡牌";
                 }else{
                     rongEl.innerText="詐胡XD";
                 }
-            }else if(handcardLen%3==0){
+            }else if(handcardLen%3==1){
                 if(mj2(handcardList).length>0){
                     listencardList=mj2(handcardList);
                     rongEl.innerText="聽牌中";
@@ -69,13 +75,19 @@ function plotContainer(){
                 handcardList[13]=0;
             }
             listencardList=[];
-            if(handcardLen%3==0){
+            handcardLen=0;
+            for (let i=0;i<14;i++){
+                if(handcardList[i]!=0){
+                    handcardLen++;
+                }
+            }
+            if(handcardLen%3==2){
                 if(mj1(handcardList)){
                     rongEl.innerText="合法胡牌";
                 }else{
                     rongEl.innerText="詐胡XD";
                 }
-            }else if(handcardLen%3==2){
+            }else if(handcardLen%3==1){
                 if(mj2(handcardList).length>0){
                     listencardList=mj2(handcardList);
                     rongEl.innerText="聽牌中";
@@ -104,4 +116,3 @@ function plotContainer(){
         listenContainerEl.appendChild(listencard);
     }
 }
-
