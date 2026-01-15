@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>麻將桌面</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="table">
+      <div class="seat seat-north" data-pos="north"><span class="role">北家</span><div class="display-name">北</div><div class="score">0</div></div>
+      <div class="seat seat-west" data-pos="west"><span class="role">西家</span><div class="display-name">西</div><div class="score">0</div></div>
+      <div class="seat seat-east" data-pos="east"><span class="role">東家</span><div class="display-name">東</div><div class="score">0</div></div>
+      <div class="seat seat-south" data-pos="south"><span class="role">南家</span><div class="display-name">南</div><div class="score">0</div></div>
+
+      <div class="controls">
+        <div class="controls-row">
+          <div class="opt-block">
+            <div class="opt-label">贏家</div>
+            <div id="winnerOptions" class="option-group" role="radiogroup" aria-label="贏家"></div>
+          </div>
+          <div class="opt-block" id="loserBlock">
+            <div class="opt-label">輸家</div>
+            <div id="loserOptions" class="option-group" role="radiogroup" aria-label="輸家"></div>
+          </div>
+        </div>
+        <div class="controls-row">
+          <label>點數
+            <input id="pointsInput" type="number" min="1" value="1" style="width:58px;padding:6px;border-radius:6px;border:1px solid rgba(0,0,0,0.12)">
+          </label>
+          <label>底
+            <input id="baseInput" type="number" min="0" value="1" style="width:52px;padding:6px;border-radius:6px;border:1px solid rgba(0,0,0,0.12)">
+          </label>
+          <label>每台點數
+            <input id="perTaiInput" type="number" min="1" value="1" style="width:52px;padding:6px;border-radius:6px;border:1px solid rgba(0,0,0,0.12)">
+          </label>
+          <button id="autoCalcBtn" type="button" class="zimo-btn" style="padding:6px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.12);background:#fff">台→點</button>
+          <label style="display:flex;align-items:center;gap:8px;margin-left:8px">
+            <button id="zimoBtn" type="button" class="zimo-btn" style="padding:6px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.12);background:#fff">自摸</button>
+          </label>
+        </div>
+        <div class="controls-row">
+          <button id="recordBtn">記錄</button>
+          <button id="clearBtn">重設桌面</button>
+        </div>
+        <div class="controls-row">
+          <button id="lianzhuangBtn" type="button">連莊</button>
+          <button id="xiadzhuangBtn" type="button">下莊</button>
+        </div>
+        <div class="controls-row">
+          <div id="handIndicator" class="hand-indicator" aria-label="局數"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fan-panel" aria-label="台數">
+      <div class="fan-header">
+        <div class="fan-title">台數</div>
+        <div class="fan-total">總台：<span id="fanTotal">0</span></div>
+      </div>
+      <div id="fanOptions" class="option-group" aria-label="台數選擇"></div>
+      <div class="fan-custom">
+        <label class="fan-custom-label">自訂台型
+          <input id="fanNameInput" type="text" maxlength="20" placeholder="例如：清一色" />
+        </label>
+        <label class="fan-custom-label">台數
+          <input id="fanValueInput" type="number" min="1" value="1" />
+        </label>
+        <button id="fanAddBtn" type="button">加入</button>
+        <button id="fanClearBtn" type="button">清空</button>
+      </div>
+      <div id="fanSelectedHint" class="fan-hint" aria-label="已選台型"></div>
+    </div>
+
+    <div class="seat-actions">
+      <div class="seat-actions-row">
+        <div class="seat-actions-title">座位操作</div>
+        <div id="seatPickOptions" class="option-group option-group-compact" role="radiogroup" aria-label="選擇座位"></div>
+      </div>
+      <div class="seat-actions-row">
+        <button id="seatRenameBtn" type="button">改名</button>
+        <button id="seatAddBtn" type="button">加分</button>
+        <button id="seatSubBtn" type="button">扣分</button>
+        <button id="seatResetBtn" type="button">重設分數</button>
+        <button id="seatDealerBtn" type="button">設為莊家</button>
+      </div>
+    </div>
+
+    <div class="history">
+      <div class="history-header">
+        <h2>紀錄</h2>
+        <div class="history-actions">
+          <button id="undoHistoryBtn" type="button">復原</button>
+          <button id="redoHistoryBtn" type="button">重做</button>
+          <button id="newSessionBtn" type="button">新的一場</button>
+          <button id="deleteAllHistoryBtn" type="button">刪除全部</button>
+        </div>
+      </div>
+      <table class="history-table" aria-label="紀錄表格">
+        <thead>
+          <tr>
+            <th>贏家</th>
+            <th>輸家 / 自摸</th>
+            <th>點數</th>
+            <th>台</th>
+            <th>誰莊</th>
+            <th>局</th>
+            <th>時間</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="historyList"></tbody>
+      </table>
+
+      <div class="settlement" aria-label="結算">
+        <div class="settlement-header">
+          <h3>結算 / 對帳</h3>
+        </div>
+        <div id="settlementSummary" class="settlement-summary"></div>
+        <div id="settlementTransfers" class="settlement-transfers"></div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align: center;color: #3A7CA5;">
+    <a href="../main.html">[回首頁]</a>
+  </div>
+
+  <script src="mjList.js"></script>
+  <script src="mj.core.js"></script>
+  <script src="mj.fan.js"></script>
+  <script src="mj.dealer.js"></script>
+  <script src="mj.history.js"></script>
+  <script src="mj.ui.js"></script>
+  <script src="mj.game.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
