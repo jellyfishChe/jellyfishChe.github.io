@@ -1,21 +1,30 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-    <title>港麻</title>
-    <link rel="stylesheet" href="style.css">
-    <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>New Page</title>
+  <style>
+    body{font-family: Arial, Helvetica, sans-serif; padding:2rem; background-color:#2E2E2E}
+    label,input{font-size:1rem; color: #ffffffb7;}
+    input{padding:.5rem; margin-left:.5rem; background-color:#3A3A3A; border: none; border-radius: 4px; width: 200px;}
+  </style>
 </head>
-<body style="background-color: #2E2E2E;">
-    <h1 style="text-align: center;color: #3A7CA5;">港麻 目錄</h1>
-    <div class="mainContainer">
-        <div class="mainRect">
-            <a href="calc/index.html">[台數計算機]</a>
-        </div>
-        <div class="mainRect">
-            <a href="listen/index.html">[聽牌計算機]</a>
-        </div>
-    </div>
+<body>
+  <label for="codeInput">請輸入文本</label>
+  <input id="codeInput" type="text" placeholder="天女下凡" autocomplete="off" />
+  
+  <h5>test text</h5>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      var input = document.getElementById('codeInput');
+      input.addEventListener('input', function(){
+        if (input.value === 'text') {
+          window.location.href = './main.html';
+        }
+      });
+    });
+  </script>
 </body>
-
 </html>
