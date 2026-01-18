@@ -1,3 +1,3 @@
-## MJ calculator
+## Good Morning
 
-a big shit
+this project is a big shit

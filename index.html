@@ -20,8 +20,11 @@
     document.addEventListener('DOMContentLoaded', function(){
       var input = document.getElementById('codeInput');
       input.addEventListener('input', function(){
-        if (input.value === 'text') {
+        if (input.value === 'MJ') {
           window.location.href = './MJ/index.html';
+        }
+        if (input.value === 'test') {
+          window.location.href = './test/index.html';
         }
       });
     });
