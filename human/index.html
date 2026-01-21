@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>._.</title>
+	<style>
+		:root{
+			--bg: #0f172a;
+			--panel: rgba(255,255,255,.06);
+			--panel2: rgba(255,255,255,.09);
+			--text: rgba(255,255,255,.92);
+			--muted: rgba(255,255,255,.72);
+			--border: rgba(255,255,255,.12);
+			--accent: #60a5fa;
+			--accent2: #34d399;
+		}
+		*{ box-sizing:border-box; }
+		body{
+			margin:0;
+			font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+			color:var(--text);
+			background: radial-gradient(1200px 600px at 20% 10%, rgba(96,165,250,.25), transparent 60%),
+									radial-gradient(900px 500px at 80% 20%, rgba(52,211,153,.18), transparent 55%),
+									linear-gradient(180deg, #0b1022, var(--bg));
+			min-height:100vh;
+		}
+		.wrap{ max-width: 980px; margin: 0 auto; padding: 28px 18px 40px; }
+		header{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+		h1{ margin:0; font-size: 24px; letter-spacing:.3px; }
+		.sub{ margin-top:6px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+		.top-actions{ display:flex; gap:10px; }
+		a.btn{
+			display:inline-flex; align-items:center; gap:8px;
+			padding:10px 12px;
+			border: 1px solid var(--border);
+			border-radius: 10px;
+			color: var(--text);
+			text-decoration:none;
+			background: rgba(255,255,255,.04);
+			backdrop-filter: blur(6px);
+			transition: transform .12s ease, background .12s ease, border-color .12s ease;
+			white-space:nowrap;
+		}
+		a.btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); }
+
+		.grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: 14px; margin-top: 18px; }
+		.card{
+			grid-column: span 12;
+			border: 1px solid var(--border);
+			border-radius: 14px;
+			background: linear-gradient(180deg, var(--panel), rgba(255,255,255,.03));
+			padding: 16px 16px 14px;
+			text-decoration:none;
+			color: inherit;
+			transition: transform .12s ease, border-color .12s ease, background .12s ease;
+		}
+		.card:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); background: linear-gradient(180deg, var(--panel2), rgba(255,255,255,.03)); }
+		.card h2{ margin:0; font-size: 18px; }
+		.card p{ margin:8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+		.meta{ margin-top:12px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+		.tag{
+			display:inline-flex; align-items:center;
+			padding: 5px 9px;
+			border-radius: 999px;
+			border: 1px solid var(--border);
+			font-size: 12px;
+			color: rgba(255,255,255,.82);
+			background: rgba(255,255,255,.04);
+		}
+		.go{ color: var(--accent); font-size: 13px; }
+
+		@media (min-width: 720px){
+			h1{ font-size: 28px; }
+			.card{ grid-column: span 6; }
+			.card.full{ grid-column: span 12; }
+		}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<header>
+			<div>
+				<h1>Human / Population Models</h1>
+				<div class="sub">主選單：人口/傳染/成長模型相關的小工具與頁面。</div>
+			</div>
+			<div class="top-actions">
+				<a class="btn" href="../index.html" aria-label="Back to home">
+					<span>←</span><span>Home</span>
+				</a>
+			</div>
+		</header>
+
+		<section class="grid" aria-label="Human model menu">
+			<a class="card" href="./logistic/index.html">
+				<h2>Logistic</h2>
+				<p>Logistic growth（承載量/成長率）相關視覺化或計算頁。</p>
+				<div class="meta">
+					<span class="tag">growth</span>
+					<span class="go">Open →</span>
+				</div>
+			</a>
+
+			<a class="card" href="./SIR/index.html">
+				<h2>SIR</h2>
+				<p>基礎 SIR（Susceptible / Infectious / Recovered）模型頁面入口。</p>
+				<div class="meta">
+					<span class="tag">epidemic</span>
+					<span class="go">Open →</span>
+				</div>
+			</a>
+
+			<a class="card" href="./SIR_2/index.html">
+				<h2>SIR_2</h2>
+				<p>SIR 的延伸/版本 2（若有規劃可參考同資料夾的 plan.md）。</p>
+				<div class="meta">
+					<span class="tag">epidemic</span>
+					<span class="go">Open →</span>
+				</div>
+			</a>
+		</section>
+	</div>
+</body>
+</html>

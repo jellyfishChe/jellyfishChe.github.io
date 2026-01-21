@@ -20,11 +20,14 @@
     document.addEventListener('DOMContentLoaded', function(){
       var input = document.getElementById('codeInput');
       input.addEventListener('input', function(){
-        if (input.value === 'MJ') {
+        if (input.value === 'MJ') { // mj mode
           window.location.href = './MJ/index.html';
         }
-        if (input.value === 'calc') {
+        if (input.value === 'calc') { // calculator
           window.location.href = './calc/index.html';
+        }
+        if (input.value === 'human') { // population model, include logistic and SIR 
+          window.location.href = './human/index.html';
         }
         if (input.value === 'test') {
           window.location.href = './test/index.html';
