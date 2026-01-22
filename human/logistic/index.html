@@ -4,13 +4,106 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Logistic — Human</title>
-	<style>body{font-family:Segoe UI, Roboto, Arial; background:#081226; color:#e8f4ff; padding:24px} a{color:#7dd3fc}</style>
+	<style>
+		body{font-family:Segoe UI, Roboto, Arial; background:#081226; color:#e8f4ff; padding:24px}
+		a{color:#7dd3fc}
+		label input{width:80px}
+		.controls{margin-top:18px}
+		canvas{display:block;margin-top:12px;background:#071126;border:1px solid #123}
+		button{margin-left:8px}
+	</style>
 </head>
 <body>
 	<h1>Logistic</h1>
-	<p class="muted">Logistic growth example / placeholder.</p>
-	<p>
-		<a href="../index.html">← Human menu</a>
-	</p>
+	<p><a href="../index.html">← menu</a></p>
+	<p class="muted">Population vs. time (logistic model)</p>
+	
+	<div class="controls">
+		<label>p0: <input id="p0" value="1"></label>
+		<label>r: <input id="r" value="0.3"></label>
+		<label>K: <input id="K" value="100"></label>
+		<label>tMax: <input id="tmax" value="100"></label>
+		<label>dt: <input id="dt" value="0.5"></label>
+		<button id="runRK4">Run RK4</button>
+		<button id="clear">Clear</button>
+		<button id="download">Download PNG</button>
+	</div>
+
+	<canvas id="plot" width="900" height="420"></canvas>
+
+	<script src="model.js"></script>
+	<script>
+		const cvs = document.getElementById('plot');
+		const ctx = cvs.getContext('2d');
+
+		function getParams(){
+			return {
+				p0: parseFloat(document.getElementById('p0').value),
+				r: parseFloat(document.getElementById('r').value),
+				K: parseFloat(document.getElementById('K').value),
+				tMax: parseFloat(document.getElementById('tmax').value),
+				dt: parseFloat(document.getElementById('dt').value)
+			};
+		}
+
+		function clearCanvas(){ ctx.clearRect(0,0,cvs.width,cvs.height); }
+
+		function drawAxes(K, tMax){
+			ctx.save();
+			ctx.strokeStyle = '#333'; ctx.fillStyle = '#cfe6ff'; ctx.font = '12px Arial';
+			const left = 40, right = cvs.width-20, top = 20, bottom = cvs.height-40;
+			// axes
+			ctx.beginPath(); ctx.moveTo(left,bottom); ctx.lineTo(right,bottom); ctx.stroke();
+			ctx.beginPath(); ctx.moveTo(left,bottom); ctx.lineTo(left,top); ctx.stroke();
+			ctx.fillText('t', right-10, bottom+18);
+			ctx.fillText('p', left-20, top+10);
+			// y grid
+			for(let i=0;i<=5;i++){
+				const y = bottom - (i/5)*(bottom-top);
+				ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(right,y); ctx.strokeStyle='#0b2b40'; ctx.stroke();
+				ctx.fillStyle='#93bcd8'; ctx.fillText((i/5*K).toFixed(0), 6, y+4);
+			}
+			// x grid
+			for(let i=0;i<=10;i++){
+				const x = left + (i/10)*(right-left);
+				ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,bottom); ctx.strokeStyle='#071a28'; ctx.stroke();
+				ctx.fillStyle='#93bcd8'; ctx.fillText((i/10*tMax).toFixed(0), x-10, bottom+16);
+			}
+			ctx.restore();
+		}
+
+		function plotData(data, color){
+			const K = Math.max.apply(null, data.map(d=>d.p))*1.05;
+			const tMax = data[data.length-1].t || 1;
+			drawAxes(K, tMax);
+			const left = 40, right = cvs.width-20, top = 20, bottom = cvs.height-40;
+			ctx.save(); ctx.strokeStyle=color||'#ff6b6b'; ctx.lineWidth=2; ctx.beginPath();
+			data.forEach((pt, idx)=>{
+				const x = left + (pt.t / tMax) * (right-left);
+				const y = bottom - (pt.p / K) * (bottom-top);
+				if(idx===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+			});
+			ctx.stroke(); ctx.restore();
+		}
+
+		document.getElementById('runRK4').addEventListener('click', ()=>{
+			const params = getParams();
+			const data = window.logistic && window.logistic.simulateRK4 ? window.logistic.simulateRK4(params) : [];
+			clearCanvas(); if(data.length) plotData(data,'#d9534f');
+		});
+
+		// Euler method removed — use RK4
+
+		document.getElementById('clear').addEventListener('click', ()=>{ clearCanvas(); });
+
+		document.getElementById('download').addEventListener('click', ()=>{
+			const a = document.createElement('a');
+			a.href = cvs.toDataURL('image/png'); a.download = 'logistic.png'; a.click();
+		});
+
+		// initial draw
+		clearCanvas(); drawAxes(parseFloat(document.getElementById('K').value), parseFloat(document.getElementById('tmax').value));
+	</script>
+
 </body>
 </html>

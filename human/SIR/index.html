@@ -4,13 +4,126 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>SIR — Human</title>
-	<style>body{font-family:Segoe UI, Roboto, Arial; background:#071229; color:#eaf6ff; padding:24px} a{color:#7dd3fc}</style>
+	<style>
+		body{font-family:Segoe UI, Roboto, Arial; background:#081226; color:#e8f4ff; padding:24px}
+		a{color:#7dd3fc}
+		label input{width:80px}
+		.controls{margin-top:18px}
+		canvas{display:block;margin-top:12px;background:#071126;border:1px solid #123}
+		button{margin-left:8px}
+	</style>
 </head>
 <body>
 	<h1>SIR</h1>
-	<p class="muted">SIR model placeholder.</p>
-	<p>
-		<a href="../index.html">← Human menu</a>
-	</p>
+	<p><a href="../index.html">← menu</a></p>
+	<p class="muted">SIR model: susceptible, infected, recovered vs time</p>
+
+	<div class="controls">
+		<label>S0: <input id="S0" value="999"></label>
+		<label>I0: <input id="I0" value="1"></label>
+		<label>R0: <input id="R0" value="0"></label>
+		<label>beta: <input id="beta" value="0.3"></label>
+		<label>gamma: <input id="gamma" value="0.1"></label>
+		<label>tMax: <input id="tmax" value="160"></label>
+		<label>dt: <input id="dt" value="0.5"></label>
+		<button id="run">Run RK4</button>
+		<button id="clear">Clear</button>
+		<button id="download">Download PNG</button>
+	</div>
+
+	<canvas id="plot" width="900" height="420"></canvas>
+
+	<script src="model.js"></script>
+	<script>
+		const cvs = document.getElementById('plot');
+		const ctx = cvs.getContext('2d');
+
+		function getParams(){
+			const S0 = parseFloat(document.getElementById('S0').value);
+			const I0 = parseFloat(document.getElementById('I0').value);
+			const R0 = parseFloat(document.getElementById('R0').value);
+			const N = S0 + I0 + R0; // N is constant, derived from initial compartments
+			return {
+				S0, I0, R0, N,
+				beta: parseFloat(document.getElementById('beta').value),
+				gamma: parseFloat(document.getElementById('gamma').value),
+				tMax: parseFloat(document.getElementById('tmax').value),
+				dt: parseFloat(document.getElementById('dt').value)
+			};
+		}
+
+		function clearCanvas(){ ctx.clearRect(0,0,cvs.width,cvs.height); }
+
+		function drawAxes(maxY, tMax){
+			ctx.save();
+			ctx.strokeStyle = '#333'; ctx.fillStyle = '#cfe6ff'; ctx.font = '12px Arial';
+			const left = 40, right = cvs.width-20, top = 20, bottom = cvs.height-40;
+			// axes
+			ctx.beginPath(); ctx.moveTo(left,bottom); ctx.lineTo(right,bottom); ctx.stroke();
+			ctx.beginPath(); ctx.moveTo(left,bottom); ctx.lineTo(left,top); ctx.stroke();
+			ctx.fillText('t', right-10, bottom+18);
+			ctx.fillText('pop', left-30, top+10);
+			// y grid
+			for(let i=0;i<=5;i++){
+				const y = bottom - (i/5)*(bottom-top);
+				ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(right,y); ctx.strokeStyle='#0b2b40'; ctx.stroke();
+				ctx.fillStyle='#93bcd8'; ctx.fillText((i/5*maxY).toFixed(0), 6, y+4);
+			}
+			// x grid
+			for(let i=0;i<=10;i++){
+				const x = left + (i/10)*(right-left);
+				ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,bottom); ctx.strokeStyle='#071a28'; ctx.stroke();
+				ctx.fillStyle='#93bcd8'; ctx.fillText((i/10*tMax).toFixed(0), x-10, bottom+16);
+			}
+			ctx.restore();
+		}
+
+		function plotSeries(data, key, color){
+			const tMax = data[data.length-1].t || 1;
+			const maxY = Math.max.apply(null, data.map(d=>Math.max(d.S,d.I,d.R)))*1.05 || 1;
+			drawAxes(maxY, tMax);
+			const left = 40, right = cvs.width-20, top = 20, bottom = cvs.height-40;
+			ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath();
+			data.forEach((pt, idx)=>{
+				const x = left + (pt.t / tMax) * (right-left);
+				const y = bottom - (pt[key] / maxY) * (bottom-top);
+				if(idx===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+			});
+			ctx.stroke(); ctx.restore();
+		}
+
+		function drawLegend(){
+			ctx.save(); ctx.font='12px Arial';
+			const left = cvs.width-150, top=30;
+			ctx.fillStyle='#fff'; ctx.fillText('Legend', left, top);
+			ctx.fillStyle='#4caf50'; ctx.fillRect(left, top+8, 10, 6); ctx.fillStyle='#cfe6ff'; ctx.fillText('S (susceptible)', left+16, top+14);
+			ctx.fillStyle='#ff6b6b'; ctx.fillRect(left, top+22, 10, 6); ctx.fillStyle='#cfe6ff'; ctx.fillText('I (infected)', left+16, top+28);
+			ctx.fillStyle='#6fb3ff'; ctx.fillRect(left, top+36, 10, 6); ctx.fillStyle='#cfe6ff'; ctx.fillText('R (recovered)', left+16, top+42);
+			ctx.restore();
+		}
+
+		document.getElementById('run').addEventListener('click', ()=>{
+			const params = getParams();
+			const data = window.sir && window.sir.simulateSIR ? window.sir.simulateSIR(params) : [];
+			clearCanvas();
+			if(data.length){
+				plotSeries(data, 'S', '#4caf50');
+				plotSeries(data, 'I', '#ff6b6b');
+				plotSeries(data, 'R', '#6fb3ff');
+				drawLegend();
+			}
+		});
+
+		document.getElementById('clear').addEventListener('click', ()=>{ clearCanvas(); });
+
+		document.getElementById('download').addEventListener('click', ()=>{
+			const a = document.createElement('a');
+			a.href = cvs.toDataURL('image/png'); a.download = 'sir.png'; a.click();
+		});
+
+		// initial draw
+		clearCanvas(); drawAxes(1000, 160);
+	</script>
+
 </body>
 </html>
