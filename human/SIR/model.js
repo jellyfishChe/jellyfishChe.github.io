@@ -1,7 +1,5 @@
 // simple SIR model
-// dS/dt = -beta * S * I / N
-// dI/dt = beta * S * I / N - gamma * I
-// dR/dt = gamma * I
+
 /**
  * SIR model derivatives
  * @param {number} S - susceptible population
@@ -20,17 +18,7 @@ function sirDerivatives(S, I, R, N, beta, gamma) {
     dR: gamma * I
   };
 }
-/**
- * single RK4 step for SIR model
- * @param {number} S - susceptible population
- * @param {number} I - infected population
- * @param {number} R - recovered population
- * @param {number} dt - time step
- * @param {number} N - total population
- * @param {number} beta - infection rate
- * @param {number} gamma - recovery rate
- * @returns {object} - {S, I, R}
- */
+
 function rk4Step(S, I, R, dt, N, beta, gamma) {
   const k1 = sirDerivatives(S, I, R, N, beta, gamma);
   const k2 = sirDerivatives(
@@ -58,11 +46,6 @@ function rk4Step(S, I, R, dt, N, beta, gamma) {
   };
 }
 
-/**
- * simulate SIR model using RK4
- * params: {S0, I0, R0, N, beta, gamma, tMax, dt}
- * returns array of {t, S, I, R}
- */
 function simulateSIR(params) {
   const {
     S0 = 999,

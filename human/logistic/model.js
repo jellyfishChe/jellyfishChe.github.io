@@ -12,14 +12,6 @@ function logisticDerivative(p, r, K) {
 	return r * p * (1 - p / K);
 }
 
-/**
- * single Euler step
- */
-// Euler method removed; use RK4 for better accuracy
-
-/**
- * single RK4 step
- */
 function rk4Step(p, dt, r, K) {
 	const k1 = logisticDerivative(p, r, K);
 	const k2 = logisticDerivative(p + 0.5 * dt * k1, r, K);
@@ -28,12 +20,6 @@ function rk4Step(p, dt, r, K) {
 	return p + (dt / 6) * (k1 + 2 * k2 + 2 * k3 + k4);
 }
 
-/**
- * simulate using given stepper
- * params: {p0, r, K, tMax, dt}
- * stepper: function(p, dt, r, K)
- * returns array of {t, p}
- */
 function simulate(params, stepper) {
 	const { p0 = 1, r = 0.1, K = 100, tMax = 100, dt = 0.1 } = params;
 	const result = [];
